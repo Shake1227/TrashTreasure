@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "itemRegName": "minecraft:acacia_leaves",
+      "nbtString": "{RepairCost:0,display:{Name:\u0027{\"text\":\"aaa\"}\u0027}}",
+      "dropChance": 1.0,
+      "minPrice": 100,
+      "maxPrice": 500
+    },
+    {
+      "itemRegName": "minecraft:acacia_leaves",
+      "nbtString": "{RepairCost:0,display:{Name:\u0027{\"text\":\"aaa\"}\u0027}}",
+      "dropChance": 1.0,
+      "minPrice": -109990,
+      "maxPrice": -1000000
+    }
+  ],
+  "moneyCmd": "",
+  "sellCmds": [],
+  "minTime": 10,
+  "maxTime": 100,
+  "finishCmds": [],
+  "minusCmd": ""
+}
