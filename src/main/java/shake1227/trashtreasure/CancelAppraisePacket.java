@@ -8,8 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
 public class CancelAppraisePacket {
@@ -24,22 +22,19 @@ public class CancelAppraisePacket {
                 CompoundTag data = player.getPersistentData();
                 if (data.contains("TrashAppraiseItems")) {
                     ListTag list = data.getList("TrashAppraiseItems", 10);
-                    List<ItemStack> itemsToReturn = new ArrayList<>();
-
+                    // リストの内容をすべて走査して確実に返却
                     for (int i = 0; i < list.size(); i++) {
                         ItemStack stack = ItemStack.of(list.getCompound(i));
                         if (!stack.isEmpty()) {
-                            itemsToReturn.add(stack);
+                            if (!player.getInventory().add(stack)) {
+                                player.drop(stack, false);
+                            }
                         }
                     }
-
+                    // 返却後にデータを一括削除
                     data.remove("TrashAppraiseItems");
                     data.remove("TrashAppraiseTicks");
                     data.remove("TrashAppraiseTotalTicks");
-
-                    for (ItemStack stack : itemsToReturn) {
-                        net.minecraftforge.items.ItemHandlerHelper.giveItemToPlayer(player, stack);
-                    }
 
                     NotificationUtil.send(player, "FAILURE", Component.translatable("message.trashtreasure.appraise_cancel").withStyle(ChatFormatting.RED));
                     PacketHandler.INSTANCE.send(net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player), new SyncProgressPacket(-1, -1));
